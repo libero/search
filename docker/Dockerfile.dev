@@ -1,0 +1,26 @@
+FROM python:3.7.2-alpine3.8
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PATH "/root/.poetry/bin:$PATH"
+
+WORKDIR /srv/app
+
+RUN apk add --no-cache \
+    bash \
+    grep \
+    libxslt-dev
+
+RUN apk add --no-cache --virtual .build-dependencies curl && \
+    curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python && \
+    poetry config settings.virtualenvs.create false && \
+    apk del .build-dependencies
+
+COPY ./pyproject.toml ./poetry.lock ./
+
+RUN apk add --no-cache --virtual .build-dependencies \
+    gcc \
+    musl-dev \
+    && \
+    poetry install && \
+    apk del .build-dependencies
