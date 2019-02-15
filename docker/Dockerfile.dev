@@ -6,12 +6,17 @@ ENV PATH "/root/.poetry/bin:$PATH"
 
 WORKDIR /srv/app
 
-RUN apk add --no-cache \
+RUN rm -rf /var/cache/apk/* && \
+    rm -rf /tmp/* && \
+    apk update && \
+    apk add --no-cache \
     bash \
     grep \
     libxslt-dev
 
-RUN apk add --no-cache --virtual .build-dependencies curl && \
+RUN apk add --no-cache --virtual .build-dependencies \
+    curl \
+    && \
     curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python && \
     poetry config settings.virtualenvs.create false && \
     apk del .build-dependencies
@@ -20,6 +25,7 @@ COPY ./pyproject.toml ./poetry.lock ./
 
 RUN apk add --no-cache --virtual .build-dependencies \
     gcc \
+    git \
     musl-dev \
     && \
     poetry install && \
