@@ -2,7 +2,8 @@ FROM python:3.7.2-alpine3.8
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV PATH "/root/.poetry/bin:$PATH"
+ENV PATH="/root/.poetry/bin:$PATH"
+ENV FLASK_APP=search
 
 WORKDIR /srv/app
 
@@ -23,10 +24,13 @@ RUN apk add --no-cache --virtual .build-dependencies \
 
 COPY ./pyproject.toml ./poetry.lock ./
 
+ARG dev
 RUN apk add --no-cache --virtual .build-dependencies \
     gcc \
     git \
     musl-dev \
     && \
-    poetry install && \
+    poetry install ${dev} && \
     apk del .build-dependencies
+
+COPY search/ search/

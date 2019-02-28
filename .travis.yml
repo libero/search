@@ -2,11 +2,19 @@ language: minimal
 
 services: docker
 
+env:
+    global:
+        - IMAGE_TAG=$TRAVIS_COMMIT
+
 install:
-    - travis_retry make build
+    - travis_retry docker-compose -f docker/docker-compose.yml build
+    - travis_retry docker-compose -f docker/docker-compose.dev.yml build
 
 script:
     - make all-tests
+
+after_success:
+    - .scripts/travis/push-image.sh search
 
 if: |
     branch = master OR \

@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        dev: "--no-dev"
+    image: libero/search:${IMAGE_TAG:-master}
