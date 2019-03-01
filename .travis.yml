@@ -12,6 +12,7 @@ install:
 
 script:
     - make all-tests
+    - .travis/smoke-test.sh
 
 after_success:
     - .scripts/travis/push-image.sh search

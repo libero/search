@@ -2,6 +2,7 @@ PROJECT_CODEBASE_DIR = "search/"
 TESTS_DIR = "tests/"
 FILES_TO_CHECK = $(PROJECT_CODEBASE_DIR) $(TESTS_DIR)
 DOCKER_COMPOSE = docker-compose -f docker/docker-compose.dev.yml
+SERVICE_NAME = "app"
 
 help:
 	@echo "start                 - builds and/or starts all services"
@@ -35,7 +36,7 @@ stop:
 	$(DOCKER_COMPOSE) down -v
 
 checks:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "\
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "\
 	echo \"Running checks...\" && \
 	echo \"- check for breakpoints\" && \
 	source scripts/find-breakpoints.sh && \
@@ -50,38 +51,38 @@ checks:
 
 .PHONY: tests
 tests:
-	$(DOCKER_COMPOSE) run --rm --service-ports web /bin/bash -c \
+	$(DOCKER_COMPOSE) run --rm --service-ports $(SERVICE_NAME) /bin/bash -c \
 	"pytest -s --pdbcls=IPython.terminal.debugger:Pdb -vv"
 
 all-tests: checks tests
 
 fix-imports:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "isort -y"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "isort -y"
 
 .PHONY: run
 run:
-	$(DOCKER_COMPOSE) run --rm --service-ports web
+	$(DOCKER_COMPOSE) run --rm --service-ports $(SERVICE_NAME)
 
 shell:
-	$(DOCKER_COMPOSE) run --rm --service-ports web /bin/bash
+	$(DOCKER_COMPOSE) run --rm --service-ports $(SERVICE_NAME) /bin/bash
 
 build:
-	$(DOCKER_COMPOSE) build web
+	$(DOCKER_COMPOSE) build $(SERVICE_NAME)
 
 dependency-tree:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "poetry show --tree"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry show --tree"
 
 d-tree: dependency-tree  # alias for dependency-tree
 
 add-dependency:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "poetry add $(package)"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry add $(package)"
 
 add-dev-dependency:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "poetry add $(package) --dev"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry add $(package) --dev"
 
 remove-dependency:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "poetry remove $(package)"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry remove $(package)"
 
 remove-dev-dependency:
-	$(DOCKER_COMPOSE) run --rm web /bin/bash -c "poetry remove $(package) --dev"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry remove $(package) --dev"
 

@@ -1,12 +1,13 @@
-version: '3'
+version: '3.4'
 
 services:
-  web:
+  app:
     build:
       context: ..
       dockerfile: docker/Dockerfile
       args:
         dev: ""
+        simulate_removal: "-s"
     image: libero/search_dev:${IMAGE_TAG:-master}
     volumes:
       - ..:/srv/app

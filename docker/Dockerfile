@@ -25,12 +25,14 @@ RUN apk add --no-cache --virtual .build-dependencies \
 COPY ./pyproject.toml ./poetry.lock ./
 
 ARG dev
+ARG simulate_removal
 RUN apk add --no-cache --virtual .build-dependencies \
     gcc \
     git \
+    linux-headers \
     musl-dev \
     && \
     poetry install ${dev} && \
-    apk del .build-dependencies
+    apk del ${simulate_removal} .build-dependencies
 
 COPY search/ search/
