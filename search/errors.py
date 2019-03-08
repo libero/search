@@ -11,13 +11,11 @@ NAMESPACE_MAP = {None: 'urn:ietf:rfc:7807'}
 
 def http_error_handler(error: HTTPException) -> Response:
     doc = ElementMaker(nsmap=NAMESPACE_MAP)
-    # pylint: disable=no-member
     error_doc = doc.problem(
         doc.status(str(error.code)),
         doc.title(error.name),
         doc.detail(error.description),
     )
-    # pylint: enable=no-member
     error_doc.set('{%s}lang' % XML_NAMESPACE, "en")
     response = etree.tostring(error_doc, xml_declaration=True, encoding='UTF-8')
     return Response(response=response, status=error.code, mimetype='application/problem+xml')
@@ -27,7 +25,7 @@ def get_error_blueprint() -> Blueprint:
     blueprint = Blueprint('error', __name__)
 
     @blueprint.route('/error', methods=['GET'])
-    def error() -> None:  # pylint: disable=unused-variable
+    def error() -> None:
         """
         /error endpoint designed to test error pages
         """
