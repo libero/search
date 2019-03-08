@@ -8,26 +8,14 @@ help:
 	@echo "start                 - builds and/or starts all services"
 	@echo "stop                  - stops all running containers belonging to the project"
 	@echo "checks                - runs static checks such as linting without running unit tests"
-	@echo "tests                 - runs unit tests in debug mode (able to use pdb breakpoints)"
+	@echo "tests                 - runs unit tests in debug mode"
 	@echo "all-tests             - runs static checks and unit tests"
-	@echo "fix-imports           - silently modifies imports on all project files that do not"
-	@echo "                        adhere to project coding standards regarding imports"
-	@echo "run                   - only runs the application service (able to use pdb breakpoints)"
+	@echo "fix-imports           - automatically formats imports in all python files"
+	@echo "run                   - only runs the application service (debugging enabled)"
 	@echo "shell                 - enter the shell of the application service"
 	@echo "build                 - builds the application service"
-	@echo "---------------------------------------------------------------"
-	@echo "make build should be run after adding and removing dependencies"
-	@echo "---------------------------------------------------------------"
 	@echo "dependency-tree       - show dependency tree"
 	@echo "d-tree                - alias for \"dependency-tree\""
-	@echo "add-dependency        - add or update a python dependency by specifying a package"
-	@echo "                        e.g. make dependency package=flask"
-	@echo "                        e.g. make dependency package=flask==1.0.2"
-	@echo "add-dev-dependency    - same as \"dependency\" except the package will be installed"
-	@echo "                        during development only"
-	@echo "remove-dependency     - remove a python dependency by specifying a package"
-	@echo "                        e.g. make remove-dependency package=flask"
-	@echo "remove-dev-dependency - same as \"remove-dependency\" regarding development dependencies"
 
 start:
 	 $(DOCKER_COMPOSE) up
@@ -73,16 +61,3 @@ dependency-tree:
 	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry show --tree"
 
 d-tree: dependency-tree  # alias for dependency-tree
-
-add-dependency:
-	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry add $(package)"
-
-add-dev-dependency:
-	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry add $(package) --dev"
-
-remove-dependency:
-	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry remove $(package)"
-
-remove-dev-dependency:
-	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry remove $(package) --dev"
-

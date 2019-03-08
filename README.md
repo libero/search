@@ -24,59 +24,30 @@ found in the `Makefile` into your command line interface.
  by unit tests
 
 ## Adding and removing dependencies
+This project uses [Poetry](https://poetry.eustace.io/) for dependency management.
 
-The following commands update files that keep track of project dependencies.
+To [add](https://poetry.eustace.io/docs/cli/#add) and [remove](https://poetry.eustace.io/docs/cli/#remove)
+a project dependency, run `make shell` to enter the bash shell of the app container
+and make changes as necessary. Any changes made will only update `pyproject.toml`
+and `poetry.lock` files. If you would like to apply the changes to the app container
+then rebuild the container by running `make build`.
 
+Example:
 ```bash
-make add-dependency package=<package name>
-make add-dev-dependency package=<package name>
-
-# examples:
-make add-dependency package=flask
-make add-dependency package=flask==1.0.2
-make add-dev-dependency package=pytest
+$ make shell
+bash 4.4# poetry add pytest --dev
+(ctrl + d to exit the container shell)
+$ make build
 ```
-These commands add a python package as a project dependency or 
-development dependency alike. You can specify just the package name to get the 
-latest version or specify a specific version number.
 
-```bash
-make remove-dependency package=<package name>
-make remove-dev-dependency package=<package name>
-```
-These commands remove dependencies accordingly.
-
-```bash
-make build
-```
-Will rebuild the python container and persist changes made to dependency files.
+For a full list of Poetry cli options visit the official documentation [here](https://poetry.eustace.io/docs/cli/)
 
 ## Other useful commands
-```bash
-make run
-```
-Use this command to only run the python service.
-It is possible to use pdb breakpoints with this configuration.
 
-```bash
-make shell
-```
-Use this to run the python container that would run the application and enter a
-bash prompt.
-
-```bash
-make dependency-tree
-# or
-make d-tree
-```
-Use this to display a dependency tree
-
-```bash
-make fix-imports
-```
-When checks are run warnings are displayed because imports do not follow the
-project conventions as specified in `setup.cfg` under `[isort]`.
-Use this command to automatically fix imports for all project python files.
+- `make run` Only runs the python service. Useful for debugging with pdb.
+- `make shell` Enters the container and presents a bash shell.
+- `make dependency-tree` or `make d-tree` Displays a dependency tree.
+- `make fix-imports` Automatically format imports for all project python files.
 
 ## Getting help
 
