@@ -17,6 +17,12 @@ script:
 after_success:
     - .scripts/travis/push-image.sh search
 
+deploy:
+    provider: script
+    script: .scripts/travis/downstream.sh environments "Update search to $TRAVIS_COMMIT"
+    on:
+        branch: master
+
 if: |
     branch = master OR \
     branch =~ /^[0-9\.]+$/ OR \
