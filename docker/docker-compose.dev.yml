@@ -6,16 +6,23 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       args:
+        env: "development"
         dev: ""
         simulate_removal: "-s"
     image: libero/search_dev:${IMAGE_TAG:-master}
     volumes:
       - ..:/srv/app
+      - ./settings.dev.py:/srv/app/search/settings.py
     command: "flask run --host=0.0.0.0"
     healthcheck:
         test: ["CMD", "nc", "-z", "localhost", "5000"]
         interval: 5s
     ports:
       - "5000:5000"
-    env_file:
-      - dev.env
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    ports:
+      - 9200:9200
+    environment:
+      - discovery.type=single-node

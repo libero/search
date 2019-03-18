@@ -1,6 +1,15 @@
 # Libero Search
 This project is an implementation of Libero search API
 
+Contents:
+ - [Dependencies](#dependencies)
+ - [Getting Started](#getting-started)
+ - [Running tests locally](#running-tests-locally)
+ - [Adding and removing dependencies](#adding-and-removing-dependencies)
+ - [Other useful commands](#other-useful-commands)
+ - [Configuration](#configuration)
+ - [Getting help](#getting-help)
+
 ## Dependencies
 
 * [Docker](https://www.docker.com/)
@@ -16,7 +25,7 @@ found in the `Makefile` into your command line interface.
 * `make start` builds and/or runs the site locally configured for development purposes.
 * `make stop` stops containers and cleans up any anonymous volumes.
 
-## Running the tests
+## Running tests locally
 
 * `make tests` runs unit tests.
 * `make checks` runs static checks such as: mypy, flake8, pylint.
@@ -40,7 +49,7 @@ bash 4.4# poetry add pytest --dev
 $ make build
 ```
 
-For a full list of Poetry cli options visit the official documentation [here](https://poetry.eustace.io/docs/cli/)
+Visit the official Poetry documentation for a full list of [Poetry commands](https://poetry.eustace.io/docs/cli/)
 
 ## Other useful commands
 
@@ -48,6 +57,23 @@ For a full list of Poetry cli options visit the official documentation [here](ht
 - `make shell` Enters the container and presents a bash shell.
 - `make dependency-tree` or `make d-tree` Displays a dependency tree.
 - `make fix-imports` Automatically format imports for all project python files.
+
+## Configuration
+
+To change Flask's default settings, supply the relevant environment variables with
+the FLASK_ prefix. For more details see [environment variables with the FLASK_ prefix](http://flask.pocoo.org/docs/1.0/config/#environment-and-debug-features)
+
+To supply search settings that need to be accessed globally, add them to `search/settings.py`.
+It is recommended that you do not commit anything to this file but instead supply your
+own version during deployment for portability and to safeguard sensitive information.
+ 
+For development purposes, the application container expects to find `docker/settings.dev.py`
+and will replace `search/settings.py` in the application container.
+
+Default Fields:
+- `GATEWAY_URL` specify the full address of your api gateway.
+- `ELASTICSEARCH_HOSTS` a list of urls for each elastic search node.
+- `CONTENT_SERVICES_TO_INDEX` a list of service names to request content from.
 
 ## Getting help
 

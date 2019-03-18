@@ -6,14 +6,17 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       args:
+        env: "production"
         dev: "--no-dev"
         simulate_removal: ""
     image: libero/search:${IMAGE_TAG:-master}
     volumes:
       - ./uwsgi.ini:/srv/app/uwsgi.ini
+      - ./settings.dev.py:/srv/app/search/settings.py
     # immediate shutdown, there is no graceful shutdown
     # https://uwsgi-docs.readthedocs.io/en/latest/Management.html#signals-for-controlling-uwsgi
     stop_signal: SIGQUIT
+
   web:
     image: nginx:1.15.5-alpine
     ports:

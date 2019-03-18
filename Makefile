@@ -2,7 +2,7 @@ PROJECT_CODEBASE_DIR = "search/"
 TESTS_DIR = "tests/"
 FILES_TO_CHECK = $(PROJECT_CODEBASE_DIR) $(TESTS_DIR)
 DOCKER_COMPOSE = docker-compose -f docker/docker-compose.dev.yml
-SERVICE_NAME = "app"
+SERVICE_NAME = app
 
 help:
 	@echo "start                 - builds and/or starts all services"

@@ -24,6 +24,9 @@ RUN apk add --no-cache --virtual .build-dependencies \
 
 COPY ./pyproject.toml ./poetry.lock ./
 
+ARG env
+ENV FLASK_ENV=${env}
+
 ARG dev
 ARG simulate_removal
 RUN apk add --no-cache --virtual .build-dependencies \

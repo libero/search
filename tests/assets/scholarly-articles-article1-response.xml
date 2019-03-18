@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<item xmlns:jats="http://jats.nlm.nih.gov" xmlns="http://libero.pub">
+  <meta>
+    <id>article1</id>
+    <service>scholarly-articles</service>
+  </meta>
+  <jats:article>
+    <jats:front>
+      <jats:article-meta>
+        <jats:title-group>
+          <jats:article-title>Article 1</jats:article-title>
+        </jats:title-group>
+      </jats:article-meta>
+    </jats:front>
+  </jats:article>
+</item>

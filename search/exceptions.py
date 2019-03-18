@@ -1,0 +1,4 @@
+
+
+class RequiredSettingNotSet(Exception):
+    pass
