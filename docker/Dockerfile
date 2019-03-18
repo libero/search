@@ -36,3 +36,6 @@ RUN apk add --no-cache --virtual .build-dependencies \
     apk del ${simulate_removal} .build-dependencies
 
 COPY search/ search/
+
+CMD ["uwsgi", "--ini=uwsgi.ini"]
+HEALTHCHECK --interval=5s CMD sh -c 'nc -z localhost 9000'
