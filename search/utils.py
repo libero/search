@@ -18,5 +18,5 @@ def strip_slashes(path: str) -> str:
 def check_required_settings() -> None:
     for setting in REQUIRED_SETTINGS:
         if not getattr(settings, setting, None):
-            message = f'{setting} is required and must be set in search/constants.py\n'
+            message = f'{setting} is required and must be set in search/settings.py\n'
             raise RequiredSettingNotSet(message)

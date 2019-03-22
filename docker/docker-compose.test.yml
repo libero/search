@@ -1,0 +1,7 @@
+version: '3.4'
+
+services:
+  app:
+    volumes:
+      - ..:/srv/app
+      - ./settings.test.py:/srv/app/search/settings.py

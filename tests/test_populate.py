@@ -1,20 +1,15 @@
-from search import index, populate
+from search.settings import CONTENT_SERVICES_TO_INDEX, GATEWAY_URL
 from tests.assets import get_asset
 
 
 def test_populate(client, requests_mock, mocker):
-    gateway = 'http://api-gateway'
-    service_to_index = 'scholarly-articles'
-
-    index.ELASTICSEARCH_HOSTS = ['http://elasticsearch']
-    populate.GATEWAY_URL = gateway
-    populate.CONTENT_SERVICES_TO_INDEX = [service_to_index]
+    service_to_index = CONTENT_SERVICES_TO_INDEX[0]
 
     xml = get_asset('scholarly-articles-items-response.xml')
-    requests_mock.get(f'{gateway}/{service_to_index}/items', text=xml)
+    requests_mock.get(f'{GATEWAY_URL}/{service_to_index}/items', text=xml)
 
     xml = get_asset('scholarly-articles-article1-response.xml')
-    requests_mock.get(f'{gateway}/{service_to_index}/items/article1/versions/latest', text=xml)
+    requests_mock.get(f'{GATEWAY_URL}/{service_to_index}/items/article1/versions/latest', text=xml)
 
     es_mock = mocker.patch('search.populate.index_document')
 

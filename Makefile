@@ -39,7 +39,7 @@ checks:
 
 .PHONY: tests
 tests:
-	$(DOCKER_COMPOSE) run --rm --service-ports $(SERVICE_NAME) /bin/bash -c \
+	$(DOCKER_COMPOSE) -f docker/docker-compose.test.yml run --rm --service-ports $(SERVICE_NAME) /bin/bash -c \
 	"pytest -s --pdbcls=IPython.terminal.debugger:Pdb -vv"
 
 all-tests: checks tests
