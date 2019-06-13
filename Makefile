@@ -39,13 +39,12 @@ checks:
 
 .PHONY: tests
 tests:
-	$(DOCKER_COMPOSE) -f docker/docker-compose.test.yml run --rm --service-ports $(SERVICE_NAME) /bin/bash -c \
-	"pytest -s --pdbcls=IPython.terminal.debugger:Pdb -vv"
+	$(DOCKER_COMPOSE) -f docker/docker-compose.test.yml run --rm --service-ports $(SERVICE_NAME) pytest -vv
 
 all-tests: checks tests
 
 fix-imports:
-	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "isort -y"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) isort -y
 
 .PHONY: run
 run:
@@ -58,6 +57,6 @@ build:
 	$(DOCKER_COMPOSE) build $(SERVICE_NAME)
 
 dependency-tree:
-	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) /bin/bash -c "poetry show --tree"
+	$(DOCKER_COMPOSE) run --rm $(SERVICE_NAME) poetry show --tree
 
 d-tree: dependency-tree  # alias for dependency-tree

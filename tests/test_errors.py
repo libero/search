@@ -18,10 +18,7 @@ from tests.schema_utils import get_schema_file_path
     (409, 'Conflict'),
     (410, 'Gone'),
     (411, 'Length Required'),
-    # Custom response data and headers are removed for HTTP 412.
-    # Fixed in werkzeug 0.15
-    # See Flask issue 3093 for more information.
-    # (412, 'Precondition Failed'),
+    (412, 'Precondition Failed'),
     (413, 'Request Entity Too Large'),
     (414, 'Request URI Too Long'),
     (415, 'Unsupported Media Type'),
