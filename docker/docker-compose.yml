@@ -5,10 +5,7 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      args:
-        env: "production"
-        dev: "--no-dev"
-        simulate_removal: ""
+      target: prod
     image: libero/search:${IMAGE_TAG:-master}
     volumes:
       - ./uwsgi.ini:/srv/app/uwsgi.ini
@@ -16,6 +13,9 @@ services:
     # immediate shutdown, there is no graceful shutdown
     # https://uwsgi-docs.readthedocs.io/en/latest/Management.html#signals-for-controlling-uwsgi
     stop_signal: SIGQUIT
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/9000'"]
+      interval: 5s
 
   web:
     image: nginx:1.15.5-alpine
@@ -31,4 +31,8 @@ services:
     ports:
       - "9200:9200"
     environment:
-      - discovery.type=single-node
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms256m -Xmx256m
+    healthcheck:
+      test: ["CMD", "curl", "localhost:9200/_cluster/health?wait_for_status=yellow"]
+      interval: 5s

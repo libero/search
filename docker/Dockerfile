@@ -1,44 +1,43 @@
-FROM python:3.7.2-alpine3.8
-
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONDONTWRITEBYTECODE=1
+FROM python:3.7.3-slim as base
 ENV PATH="/root/.poetry/bin:$PATH"
 ENV FLASK_APP=search
-
 WORKDIR /srv/app
-
-RUN rm -rf /var/cache/apk/* && \
-    rm -rf /tmp/* && \
-    apk update && \
-    apk add --no-cache \
-    bash \
-    grep \
-    libxslt-dev
-
-RUN apk add --no-cache --virtual .build-dependencies \
-    curl \
-    && \
-    curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python && \
-    poetry config settings.virtualenvs.create false && \
-    apk del .build-dependencies
-
 COPY ./pyproject.toml ./poetry.lock ./
-
-ARG env
-ENV FLASK_ENV=${env}
-
-ARG dev
-ARG simulate_removal
-RUN apk add --no-cache --virtual .build-dependencies \
-    gcc \
-    git \
-    linux-headers \
-    musl-dev \
-    && \
-    poetry install ${dev} && \
-    apk del ${simulate_removal} .build-dependencies
-
+RUN set -ex \
+    && apt-get update -yq \
+    && apt-get install -yq --no-install-recommends curl \
+    && curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python \
+    && poetry config settings.virtualenvs.create false \
+    && apt-get remove --purge --autoremove -yq curl \
+    && rm -rf ~/.cache/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*
+RUN set -ex \
+    && apt-get update -yq \
+    && apt-get install -yq --no-install-recommends build-essential \
+    && poetry install --no-dev \
+    && apt-get remove --purge --autoremove -yq curl build-essential \
+    && rm -rf ~/.cache/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*
 COPY search/ search/
 
+
+FROM base as dev
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+RUN set -ex \
+    && apt-get update -yq \
+    && apt-get install -yq --no-install-recommends git \
+    && poetry install \
+    && apt-get remove --purge --autoremove -yq git \
+    && rm -rf ~/.cache/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*
+
+
+FROM base as prod
+RUN useradd -s /bin/bash uwsgiuser
+USER uwsgiuser
 CMD ["uwsgi", "--ini=uwsgi.ini"]
 HEALTHCHECK --interval=5s CMD sh -c 'nc -z localhost 9000'

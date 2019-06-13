@@ -2,7 +2,7 @@
 name = "search"
 version = "0.1.0"
 description = "Libero search service"
-authors = [""]
+authors = ["Libero"]
 license = "MIT"
 
 [tool.poetry.dependencies]

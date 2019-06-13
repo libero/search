@@ -5,17 +5,14 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-      args:
-        env: "development"
-        dev: ""
-        simulate_removal: "-s"
+      target: dev
     image: libero/search_dev:${IMAGE_TAG:-master}
     volumes:
       - ..:/srv/app
       - ./settings.dev.py:/srv/app/search/settings.py
     command: "flask run --host=0.0.0.0"
     healthcheck:
-        test: ["CMD", "nc", "-z", "localhost", "5000"]
+        test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/5000'"]
         interval: 5s
     ports:
       - "5000:5000"
@@ -25,6 +22,8 @@ services:
     ports:
       - 9200:9200
     environment:
-      - discovery.type=single-node
+      discovery.type: single-node
+      ES_JAVA_OPTS: -Xms256m -Xmx256m
     healthcheck:
-      test: ["CMD", "curl", "localhost:9200/_cluster/health?wait_for_status=green"]
+      test: ["CMD", "curl", "localhost:9200/_cluster/health?wait_for_status=yellow"]
+      interval: 5s
