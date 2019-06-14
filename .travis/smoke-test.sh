@@ -10,9 +10,7 @@ function finish {
 trap finish EXIT
 
 docker-compose --file docker/docker-compose.yml up -d
-
-# TODO: add healthcheck to container image
-#.travis/docker-wait-healthy search_app_1
+.scripts/docker/wait-healthy.sh search_app_1
 
 ping=$(curl -sS http://localhost:8080/ping 2>&1)
 [[ "$ping" == "pong" ]]

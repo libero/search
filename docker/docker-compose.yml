@@ -13,9 +13,6 @@ services:
     # immediate shutdown, there is no graceful shutdown
     # https://uwsgi-docs.readthedocs.io/en/latest/Management.html#signals-for-controlling-uwsgi
     stop_signal: SIGQUIT
-    healthcheck:
-      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/9000'"]
-      interval: 5s
 
   web:
     image: nginx:1.15.5-alpine

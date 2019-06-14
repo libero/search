@@ -40,4 +40,4 @@ FROM base as prod
 RUN useradd -s /bin/bash uwsgiuser
 USER uwsgiuser
 CMD ["uwsgi", "--ini=uwsgi.ini"]
-HEALTHCHECK --interval=5s CMD sh -c 'nc -z localhost 9000'
+HEALTHCHECK --interval=5s CMD bash -c "echo > /dev/tcp/localhost/9000"
