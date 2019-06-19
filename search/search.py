@@ -17,7 +17,7 @@ def get_search_blueprint() -> Blueprint:
         # get all documents or query for search term
         search = Elasticsearch(hosts=ELASTICSEARCH_HOSTS)
         # pylint: disable=unexpected-keyword-arg
-        hits = search.search(index='_all', filter_path=['hits.hits._source'])
+        hits = search.search(index='_all', size=100, filter_path=['hits.hits._source'])
         # pylint: enable=unexpected-keyword-arg
         if hits:
             # get relevant information from results
