@@ -16,7 +16,7 @@ RUN set -ex \
     && apt-get update -yq \
     && apt-get install -yq --no-install-recommends build-essential \
     && poetry install --no-dev \
-    && apt-get remove --purge --autoremove -yq curl build-essential \
+    && apt-get remove --purge --autoremove -yq build-essential \
     && rm -rf ~/.cache/* \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/*
