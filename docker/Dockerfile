@@ -41,3 +41,5 @@ RUN useradd -s /bin/bash uwsgiuser
 USER uwsgiuser
 CMD ["uwsgi", "--ini=uwsgi.ini"]
 HEALTHCHECK --interval=5s CMD bash -c "echo > /dev/tcp/localhost/9000"
+ARG revision=master
+LABEL org.opencontainers.image.revision=${revision}

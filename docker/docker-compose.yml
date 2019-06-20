@@ -6,6 +6,8 @@ services:
       context: ..
       dockerfile: docker/Dockerfile
       target: prod
+      args:
+        revision: ${IMAGE_REVISION:-master}
     image: libero/search:${IMAGE_TAG:-master}
     volumes:
       - ./uwsgi.ini:/srv/app/uwsgi.ini

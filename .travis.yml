@@ -4,6 +4,7 @@ services: docker
 
 env:
     global:
+        - IMAGE_REVISION=$TRAVIS_COMMIT
         - IMAGE_TAG=$TRAVIS_COMMIT
 
 install:
