@@ -22,7 +22,7 @@ def get_search_blueprint() -> Blueprint:
         if hits:
             # get relevant information from results
             hits = hits.get('hits', {}).get('hits', [])
-            hits = [hit['_source'] for hit in hits if hit.get('_source')]
+            hits = [hit['_source'] for hit in reversed(hits) if hit.get('_source')]
 
         # create xml response
         root = etree.Element('item-list', nsmap=NAMESPACE_MAP)
